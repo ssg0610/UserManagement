@@ -11,6 +11,7 @@ namespace PruebaTecnica.Models
         public string? Phone { get; set; }
         public required string UserName { get; set; }
         public required string Password { get; set; }
-        public ICollection<UserDepartment> UserDepartments { get; set; }
+        public bool IsDeleted { get; set; }
+        public ICollection<Department>? Departments { get; set; }
     }
 }

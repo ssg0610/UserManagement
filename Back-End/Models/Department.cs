@@ -7,6 +7,7 @@ namespace PruebaTecnica.Models
         [Key]
         public int Id { get; set; }
         public required string Name { get; set; }
-        public ICollection<UserDepartment> UserDepartments { get; set; }
+        public bool IsDeleted { get; set; }
+        public ICollection<User>? Users { get; set; }
     }
 }

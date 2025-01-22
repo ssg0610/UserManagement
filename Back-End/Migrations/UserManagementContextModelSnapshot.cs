@@ -9,7 +9,7 @@ using PruebaTecnica.Context;
 
 namespace PruebaTecnica.Migrations
 {
-    [DbContext(typeof(UserManagementContext))]
+    [DbContext(typeof(ApplicationContext))]
     partial class UserManagementContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -21,6 +21,21 @@ namespace PruebaTecnica.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DepartmentUser", b =>
+                {
+                    b.Property<int>("DepartmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DepartmentsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("DepartmentUser");
+                });
+
             modelBuilder.Entity("PruebaTecnica.Models.Department", b =>
                 {
                     b.Property<int>("Id")
@@ -28,6 +43,9 @@ namespace PruebaTecnica.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,6 +63,9 @@ namespace PruebaTecnica.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -69,48 +90,19 @@ namespace PruebaTecnica.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PruebaTecnica.Models.UserDepartment", b =>
+            modelBuilder.Entity("DepartmentUser", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "DepartmentId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("UserDepartment");
-                });
-
-            modelBuilder.Entity("PruebaTecnica.Models.UserDepartment", b =>
-                {
-                    b.HasOne("PruebaTecnica.Models.Department", "Department")
-                        .WithMany("UserDepartments")
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("PruebaTecnica.Models.Department", null)
+                        .WithMany()
+                        .HasForeignKey("DepartmentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PruebaTecnica.Models.User", "User")
-                        .WithMany("UserDepartments")
-                        .HasForeignKey("UserId")
+                    b.HasOne("PruebaTecnica.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Department");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PruebaTecnica.Models.Department", b =>
-                {
-                    b.Navigation("UserDepartments");
-                });
-
-            modelBuilder.Entity("PruebaTecnica.Models.User", b =>
-                {
-                    b.Navigation("UserDepartments");
                 });
 #pragma warning restore 612, 618
         }

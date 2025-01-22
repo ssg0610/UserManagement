@@ -1,0 +1,41 @@
+<table class="table-auto">
+  <thead>
+    <tr>
+      <th>Nombre de Usuario</th>
+      <th>Nombre</th>
+      <th>Apellidos</th>
+      <th>Teléfono</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{user.userName}}</td>
+      <td>{{user.name}}</td>
+      <td>{{user.lastName}}</td>
+      <td>{{user.phone}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="border-separate border border-slate-500 ...">
+  <thead>
+    <tr>
+      <th class="border border-slate-600 ...">State</th>
+      <th class="border border-slate-600 ...">City</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-slate-700 ...">Indiana</td>
+      <td class="border border-slate-700 ...">Indianapolis</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-700 ...">Ohio</td>
+      <td class="border border-slate-700 ...">Columbus</td>
+    </tr>
+    <tr>
+      <td class="border border-slate-700 ...">Michigan</td>
+      <td class="border border-slate-700 ...">Detroit</td>
+    </tr>
+  </tbody>
+</table>

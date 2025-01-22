@@ -1,16 +1,25 @@
 using Microsoft.EntityFrameworkCore;
 using PruebaTecnica.Context;
+using PruebaTecnica.Models.DTO;
+using PruebaTecnica.Models.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Configurar Entity Framework y SQL Server
-builder.Services.AddDbContext<UserManagementContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("db")));
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("db")));
+
+// Inyección de dependencias
+builder.Services.AddScoped<UserService, UserRepository>();
+builder.Services.AddScoped<DepartmentService, DepartmentRepository>();
 
 var app = builder.Build();
 
