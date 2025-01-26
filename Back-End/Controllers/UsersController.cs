@@ -77,12 +77,31 @@ namespace PruebaTecnica.Controllers
 
         // POST: api/users
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserDTO request)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserDTO user)
         {
-            var user = await _userService.CreateUser(request);
+            try
+            {
+                var createdUser = await _userService.CreateUser(user);
 
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id}, user);
+                if (createdUser == null)
+                {
+                    // Devuelve un conflicto si el userName ya existe
+                    return Conflict(new { Message = $"El nombre de usuario '{user.UserName}' ya está en uso." });
+                }
+
+                return CreatedAtAction(nameof(GetUser), new { id = createdUser.Id }, createdUser);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "Ocurrió un error inesperado.", Details = ex.Message });
+            }
         }
+
+
 
         // PUT: api/users/{id}
         [HttpPut("{id}")]

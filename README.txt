@@ -9,6 +9,9 @@ Incluye una API desarrollada en .NET 8 y un frontend desarrollado en Angular.
 
 ### Configuración del Backend (.NET)
 - Importar la base de dato en SQL Server Management
+	- Haz click derecho en Bases de Datos y selecciona Restaurar Base de Datos
+	- Selecciona la opción de Dispositivo y carga el archivo .back 
+	- Configura las opciones de restauración y haz click en aceptar
 - Navega al directorio del backend
 - Restaurar las dependencias con el comando `dotnet restore`
 - Ejecutar la API
@@ -32,6 +35,7 @@ Incluye una API desarrollada en .NET 8 y un frontend desarrollado en Angular.
 - `/Front-End`: código fuente del frontend desarrollado en Angular
 - `/PruebaTecnica.Tests`: código de las pruebas unitarias del backend
 - `README.md`: este archivo
+- `/BBDD`: fichero para importar la base de datos
 - `.git`: carpeta que contiene el repositorio
 
 ### Ejecución de Tests

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using PruebaTecnica.Context;
 using PruebaTecnica.Models.DTOs;
 using PruebaTecnica.Models.Services;
@@ -33,6 +34,13 @@ namespace PruebaTecnica.Models.DTO
         }
         public async Task<User> CreateUser(CreateUserDTO user)
         {
+            var existingUser = await _context.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName);
+
+            if (existingUser != null) 
+            {
+                return null;
+            }
+
             var newUser = new User
             {
                 Name = user.Name,
