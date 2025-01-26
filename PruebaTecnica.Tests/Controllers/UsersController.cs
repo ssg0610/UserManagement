@@ -3,6 +3,7 @@ using Moq;
 using PruebaTecnica.Controllers;
 using PruebaTecnica.Models.Services;
 using PruebaTecnica.Models;
+using PruebaTecnica.Models.DTOs;
 
 public class UsersControllerTests
 {
@@ -67,15 +68,24 @@ public class UsersControllerTests
     public async Task CreateUser_ReturnsCreatedAtActionResult()
     {
         // Configuramos el mock para que simule la creación de un usuario.
-        var newUser = new User { Id = 1, Name = "Alice", UserName = "alice.test", Password = "test" };
-        _mockService.Setup(service => service.CreateUser(It.IsAny<User>())).ReturnsAsync(newUser);
+        var newUserDto = new CreateUserDTO
+        {
+            Name = "Alice",
+            UserName = "alice.test",
+            Password = "test"
+        };
 
-        var result = await _controller.CreateUser(newUser);
+        _mockService.Setup(service => service.CreateUser(It.IsAny<CreateUserDTO>()))
+            .ReturnsAsync(new User { Id = 1, Name = "Alice", UserName = "alice.test", Password = "test" });
+
+        var result = await _controller.CreateUser(newUserDto);
 
         // Validamos que se devuelva un resultado 201 CreatedAtAction y que el usuario devuelto sea el esperado.
         var createdResult = Assert.IsType<CreatedAtActionResult>(result);
         var returnValue = Assert.IsType<User>(createdResult.Value);
-        Assert.Equal(newUser.Id, returnValue.Id);
+        Assert.Equal(1, returnValue.Id);
+        Assert.Equal("Alice", returnValue.Name);
+        Assert.Equal("alice.test", returnValue.UserName);
     }
 
     [Fact]

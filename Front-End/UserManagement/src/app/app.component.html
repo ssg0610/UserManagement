@@ -1,41 +1,507 @@
-<table class="table-auto">
-  <thead>
-    <tr>
-      <th>Nombre de Usuario</th>
-      <th>Nombre</th>
-      <th>Apellidos</th>
-      <th>Teléfono</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of users">
-      <td>{{user.userName}}</td>
-      <td>{{user.name}}</td>
-      <td>{{user.lastName}}</td>
-      <td>{{user.phone}}</td>
-    </tr>
-  </tbody>
-</table>
+<nav class="navbar">
+  <div class="navbar-content">
+    <h2 class="title" [class.active]="showUsers" (click)="toggleView('users')">Lista de Usuarios</h2>
+    <h2 class="title" [class.active]="showDepartments" (click)="toggleView('departments')">Lista de Departamentos</h2>
+  </div>
+</nav>
 
-<table class="border-separate border border-slate-500 ...">
-  <thead>
-    <tr>
-      <th class="border border-slate-600 ...">State</th>
-      <th class="border border-slate-600 ...">City</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td class="border border-slate-700 ...">Indiana</td>
-      <td class="border border-slate-700 ...">Indianapolis</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-700 ...">Ohio</td>
-      <td class="border border-slate-700 ...">Columbus</td>
-    </tr>
-    <tr>
-      <td class="border border-slate-700 ...">Michigan</td>
-      <td class="border border-slate-700 ...">Detroit</td>
-    </tr>
-  </tbody>
-</table>
+<div class="container mx-auto px-4 py-6">
+  <div *ngIf="showUsers">
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">Listado de Usuarios</h2>
+        </div>
+        <button type="button"
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-600 focus:ring focus:ring-blue-300"
+          (click)="openUserModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100 text-left text-sm font-medium text-gray-600">
+              <th class="py-3 px-4">Nombre de Usuario</th>
+              <th class="py-3 px-4">Nombre</th>
+              <th class="py-3 px-4">Apellidos</th>
+              <th class="py-3 px-4">Teléfono</th>
+              <th class="py-3 px-4">Departamentos</th>
+              <th class="py-3 px-4">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm text-gray-800">
+            <tr *ngFor="let user of users">
+              <td class="py-3 px-4">{{ user.userName }}</td>
+              <td class="py-3 px-4">{{ user.name }}</td>
+              <td class="py-3 px-4">{{ user.lastName }}</td>
+              <td class="py-3 px-4">{{ user.phone }}</td>
+              <td class="py-3 px-4">
+                <div *ngIf="user.departments.length > 0">
+                  <span *ngFor="let dept of user.departments">
+                    {{ dept.name }} |
+                  </span>
+                </div>
+              </td>
+              <td class="py-3 px-4">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                  <button type="button"
+                    class="px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:text-blue-700"
+                    title="Detalles" (click)="openUserDetailsModal(user)">
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <!-- Editar -->
+                  <button type="button"
+                    class="px-3 py-2 text-sm font-medium text-green-600 bg-white border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-green-500 focus:text-green-700"
+                    title="Editar" (click)="openEditUserModal(user)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <!-- Eliminar -->
+                  <button type="button"
+                    class="px-3 py-2 text-sm font-medium text-red-600 bg-white border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-red-500 focus:text-red-700"
+                    title="Eliminar" (click)="openDeleteUserModal(user)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showDepartments">
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-lg font-semibold text-gray-800">Listado de Departamentos</h2>
+        </div>
+        <button type="button"
+          class="bg-blue-500 text-white px-4 py-2 rounded-lg flex items-center hover:bg-blue-600 focus:ring focus:ring-blue-300"
+          (click)="openDepartmentModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse border border-gray-200">
+          <thead>
+            <tr class="bg-gray-100 text-left text-sm font-medium text-gray-600">
+              <th class="py-3 px-4">Nombre</th>
+              <th class="py-3 px-4">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm text-gray-800">
+            <tr *ngFor="let dept of departments">
+              <td class="py-3 px-4">{{ dept.name }}</td>
+              <td class="py-3 px-4">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                  <button type="button"
+                    class="px-3 py-2 text-sm font-medium text-blue-600 bg-white border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-500 focus:text-blue-700"
+                    title="Detalles" (click)="openDetailsDepartmentModal(dept)">
+                    <i class="fas fa-search"></i>
+                  </button>
+                  <!-- Editar -->
+                  <button type="button"
+                    class="px-3 py-2 text-sm font-medium text-green-600 bg-white border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-green-500 focus:text-green-700"
+                    title="Editar" (click)="openEditDepartmentModal(dept)">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <!-- Eliminar -->
+                  <button type="button"
+                    class="px-3 py-2 text-sm font-medium text-red-600 bg-white border border-gray-300 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-red-500 focus:text-red-700"
+                    title="Eliminar" (click)="openDeleteDepartmentModal(dept)">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Modales de Usuario-->
+
+  <!--Modal para crear Usuario-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isUserModalOpen" (click)="closeUserModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" (click)="closeUserModal()">✖</button>
+
+      <form (ngSubmit)="createUser()" [formGroup]="usersForm">
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <!-- Nombre de Usuario -->
+          <div class="sm:col-span-3">
+            <label for="userName" class="block text-sm font-medium text-gray-900">Nombre de Usuario</label>
+            <div class="mt-2">
+              <input id="userName" type="text" formControlName="userName"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+              <div *ngIf="usersForm.get('userName')?.invalid && usersForm.get('userName')?.touched">
+                <span class="error text-red-500 text-sm">El nombre de usuario es obligatorio.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="sm:col-span-3">
+            <label for="password" class="block text-sm font-medium text-gray-900">Contraseña</label>
+            <div class="mt-2">
+              <input id="password" type="text" formControlName="password"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+              <div *ngIf="usersForm.get('password')?.invalid && usersForm.get('password')?.touched">
+                <span class="error text-red-500 text-sm">La contraseña es obligatoria.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nombre -->
+          <div class="sm:col-span-3">
+            <label for="name" class="block text-sm font-medium text-gray-900">Nombre</label>
+            <div class="mt-2">
+              <input formControlName="name" type="text" id="name"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Apellidos -->
+          <div class="sm:col-span-3">
+            <label for="lastName" class="block text-sm font-medium text-gray-900">Apellidos</label>
+            <div class="mt-2">
+              <input id="lastName" type="text" formControlName="lastName"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Número de Teléfono -->
+          <div class="sm:col-span-6">
+            <label for="phone" class="block text-sm font-medium text-gray-900">Número de Teléfono</label>
+            <div class="mt-2">
+              <input id="phone" type="text" formControlName="phone"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Departamentos -->
+          <div class="sm:col-span-6">
+            <label for="departments" class="block text-sm font-medium text-gray-900">Departamentos</label>
+            <div class="mt-2">
+              <ng-select formControlName="departments" [items]="departments" bindLabel="name" [multiple]="true"
+                [appendTo]="'body'"
+                class="w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm">
+                <ng-option *ngFor="let department of departments" [value]="department.id">
+                  {{ department.name }}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones del modal -->
+        <div class="flex justify-end mt-4">
+          <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
+            (click)="closeUserModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            [disabled]="usersForm.invalid">
+            Crear Usuario
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!--Modal para editar Usuario-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isEditUserModalOpen" (click)="closeUserModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" (click)="closeUserModal()">✖</button>
+
+      <form (ngSubmit)="updateUser()" [formGroup]="updateUserForm">
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <!-- Nombre -->
+          <div class="sm:col-span-3">
+            <label for="name" class="block text-sm font-medium text-gray-900">Nombre</label>
+            <div class="mt-2">
+              <input id="name" type="text" formControlName="name"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Apellidos -->
+          <div class="sm:col-span-3">
+            <label for="lastName" class="block text-sm font-medium text-gray-900">Apellidos</label>
+            <div class="mt-2">
+              <input id="lastName" type="text" formControlName="lastName"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Número de Teléfono -->
+          <div class="sm:col-span-6">
+            <label for="phone" class="block text-sm font-medium text-gray-900">Número de Teléfono</label>
+            <div class="mt-2">
+              <input id="phone" type="tel" formControlName="phone"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Nombre de Usuario -->
+          <div class="sm:col-span-3">
+            <label for="userName" class="block text-sm font-medium text-gray-900">Nombre de Usuario</label>
+            <div class="mt-2">
+              <input id="userName" type="text" formControlName="userName"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Contraseña -->
+          <div class="sm:col-span-3">
+            <label for="password" class="block text-sm font-medium text-gray-900">Contraseña</label>
+            <div class="mt-2">
+              <input id="password" type="password" formControlName="password"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+
+          <!-- Departamentos -->
+          <div class="sm:col-span-6">
+            <label for="departments" class="block text-sm font-medium text-gray-900">Departamentos</label>
+            <div class="mt-2">
+              <ng-select formControlName="departments" [items]="departments" bindLabel="name" [multiple]="true"
+                [appendTo]="'body'" [compareWith]="compareDepartments"
+                class="w-full rounded-md bg-white border border-gray-300 px-3 py-1.5 text-base text-gray-900 focus:border-indigo-600 focus:ring-indigo-600 sm:text-sm">
+                <ng-option *ngFor="let department of departments" [value]="department">
+                  {{ department.name }}
+                </ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones del modal -->
+        <div class="flex justify-end mt-4">
+          <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
+            (click)="closeUserModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            [disabled]="updateUserForm.invalid">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!--Modal para detalles del Usuario-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isUserDetailsModalOpen" (click)="closeUserDetailsModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        (click)="closeUserDetailsModal()">✖</button>
+
+      <!-- Contenido del modal -->
+      <h2 class="text-xl font-semibold mb-4">Detalles del Usuario</h2>
+      <div *ngIf="selectedUserDetails">
+        <p><strong>Nombre:</strong> {{ selectedUserDetails.name }}</p>
+        <p><strong>Apellidos:</strong> {{ selectedUserDetails.lastName }}</p>
+        <p><strong>Teléfono:</strong> {{ selectedUserDetails.phone }}</p>
+        <p><strong>Usuario:</strong> {{ selectedUserDetails.userName }}</p>
+        <p><strong>Contraseña:</strong> {{ selectedUserDetails.password }}</p>
+        <p><strong>Departamentos:</strong></p>
+        <ul *ngIf="selectedUserDetails.departments.length > 0">
+          <li *ngFor="let department of selectedUserDetails.departments">
+            {{ department.name }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          (click)="closeUserDetailsModal()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal para eliminar Usuario-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isDeleteUserModalOpen" (click)="closeUserDeleteModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        (click)="closeUserDeleteModal()">✖</button>
+
+      <!-- Mensaje de Confirmación -->
+      <h2 class="text-lg font-semibold mb-4">Confirmar Eliminación</h2>
+      <p class="text-sm text-gray-700 mb-6">
+        ¿Estás seguro que deseas eliminar al usuario <strong>{{ selectedUserToDelete?.name }}</strong>? Esta acción no
+        se puede deshacer.
+      </p>
+
+      <!-- Botones de Acción -->
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
+          (click)="closeUserDeleteModal()">
+          Cancelar
+        </button>
+        <button type="button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" (click)="deleteUser()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!--Modales de Departamento-->
+
+  <!--Modal para crear Departamento-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isDepartmentModalOpen" (click)="closeDepartmentModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        (click)="closeDepartmentModal()">✖</button>
+
+      <h2 class="text-lg font-semibold mb-4">Crear Departamento</h2>
+      <form [formGroup]="departmentsForm" (ngSubmit)="createDepartment()">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-900">Nombre del Departamento</label>
+          <input id="name" type="text" formControlName="name"
+            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+          <div *ngIf="departmentsForm.get('name')?.invalid && departmentsForm.get('name')?.touched">
+            <span class="text-red-500 text-sm">El nombre es obligatorio.</span>
+          </div>
+        </div>
+
+        <div class="flex justify-end mt-4">
+          <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
+            (click)="closeDepartmentModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            [disabled]="departmentsForm.invalid">
+            Crear
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!--Modal para editar Departamento-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isEditDepartmentModalOpen" (click)="closeDepartmentModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        (click)="closeDepartmentModal()">✖</button>
+
+      <form (ngSubmit)="updateDepartment()" [formGroup]="updateDepartmentForm">
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <!-- Nombre -->
+          <div class="sm:col-span-12">
+            <label for="name" class="block text-sm font-medium text-gray-900">Nombre</label>
+            <div class="mt-2">
+              <input id="name" type="text" formControlName="name"
+                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder:text-gray-400 focus:border-blue-600 focus:ring-blue-600 sm:text-sm">
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones del modal -->
+        <div class="flex justify-end mt-4">
+          <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
+            (click)="closeDepartmentModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            [disabled]="updateDepartmentForm.invalid">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!--Modal para detalles del Departamento-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+  [class.open]="isDetailDepartmentModalOpen"
+  (click)="closeDepartmentModal()">
+  <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative z-50"
+    (click)="$event.stopPropagation()">
+    <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" (click)="closeDepartmentModal()">✖</button>
+
+    <!-- Título del Modal -->
+    <h2 class="text-xl font-semibold mb-4">Detalles del Departamento</h2>
+
+    <!-- Información del Departamento -->
+    <div *ngIf="selectedDepartmentDetails">
+      <p><strong>Nombre del Departamento:</strong> {{ selectedDepartmentDetails.name }}</p>
+      <p><strong>Estado:</strong> {{ selectedDepartmentDetails.isDeleted ? 'Inactivo' : 'Activo' }}</p>
+
+      <!-- Listado de Usuarios -->
+      <h3 class="text-lg font-semibold mt-4">Usuarios en este Departamento:</h3>
+      <ul *ngIf="selectedDepartmentDetails.users.length > 0; else noUsers" class="list-disc pl-6">
+        <li *ngFor="let user of selectedDepartmentDetails.users">
+          {{ user.name }} ({{ user.userName }})
+        </li>
+      </ul>
+      <ng-template #noUsers>
+        <p class="text-gray-500">No hay usuarios asociados a este departamento.</p>
+      </ng-template>
+    </div>
+
+    <!-- Botón de Cerrar -->
+    <div class="flex justify-end mt-4">
+      <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        (click)="closeDepartmentModal()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+
+  <!--Modal para eliminar Departamento-->
+  <div class="modal-overlay fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+    [class.open]="isDeleteDepartmentModalOpen" (click)="closeDepartmentModal()">
+    <div class="modal-content bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative z-50"
+      (click)="$event.stopPropagation()">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        (click)="closeDepartmentModal()">✖</button>
+
+      <!-- Mensaje de Confirmación -->
+      <h2 class="text-lg font-semibold mb-4">Confirmar Eliminación</h2>
+      <p class="text-sm text-gray-700 mb-6">
+        ¿Estás seguro que deseas eliminar el departamento <strong>{{ selectedDepartmentDelete?.name }}</strong>? Esta acción no
+        se puede deshacer.
+      </p>
+
+      <!-- Botones de Acción -->
+      <div class="flex justify-end">
+        <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
+          (click)="closeDepartmentModal()">
+          Cancelar
+        </button>
+        <button type="button" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" (click)="deleteDepartment()">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>

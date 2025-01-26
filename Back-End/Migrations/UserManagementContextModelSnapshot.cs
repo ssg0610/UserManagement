@@ -33,7 +33,7 @@ namespace PruebaTecnica.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("DepartmentUser");
+                    b.ToTable("DepartmentUser", (string)null);
                 });
 
             modelBuilder.Entity("PruebaTecnica.Models.Department", b =>
@@ -53,7 +53,7 @@ namespace PruebaTecnica.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("PruebaTecnica.Models.User", b =>
@@ -87,7 +87,7 @@ namespace PruebaTecnica.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DepartmentUser", b =>

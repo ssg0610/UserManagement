@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PruebaTecnica.Context;
 using PruebaTecnica.Models;
+using PruebaTecnica.Models.DTOs;
 using PruebaTecnica.Models.Services;
 
 namespace PruebaTecnica.Controllers
@@ -11,18 +12,18 @@ namespace PruebaTecnica.Controllers
     [Route("api/users")]
     public class UsersController : ControllerBase
     {
-        private readonly UserService _userDAO;
+        private readonly UserService _userService;
 
-        public UsersController(UserService userDAO)
+        public UsersController(UserService userService)
         {
-            _userDAO = userDAO;
+            _userService = userService;
         }
 
         // GET: api/users
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _userDAO.GetUsers();
+            var users = await _userService.GetUsers();
 
             if (users == null)
             {
@@ -36,7 +37,7 @@ namespace PruebaTecnica.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
-            var user = await _userDAO.GetUser(id);
+            var user = await _userService.GetUser(id);
 
             if (user == null)
             {
@@ -50,7 +51,7 @@ namespace PruebaTecnica.Controllers
         [HttpGet("departments")]
         public async Task<IActionResult> GetUsersWithDepartment()
         {
-            var users = await _userDAO.GetUsersWithDepartment();
+            var users = await _userService.GetUsersWithDepartment();
 
             if (users == null)
             {
@@ -64,7 +65,7 @@ namespace PruebaTecnica.Controllers
         [HttpGet("{id}/departments")]
         public async Task<IActionResult> GetUserWithDepartment(int id)
         {
-            var user = await _userDAO.GetUserWithDepartment(id);
+            var user = await _userService.GetUserWithDepartment(id);
 
             if (user == null)
             {
@@ -76,23 +77,23 @@ namespace PruebaTecnica.Controllers
 
         // POST: api/users
         [HttpPost]
-        public async Task<IActionResult> CreateUser(User request)
+        public async Task<IActionResult> CreateUser(CreateUserDTO request)
         {
-            var user = await _userDAO.CreateUser(request);
+            var user = await _userService.CreateUser(request);
 
             return CreatedAtAction(nameof(GetUser), new { id = user.Id}, user);
         }
 
         // PUT: api/users/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, User request)
+        public async Task<IActionResult> UpdateUser(int id, UpdateUserDTO request)
         {
             if (id != request.Id)
             {
                 return BadRequest();
             }
 
-            var user = await _userDAO.UpdateUser(request);
+            var user = await _userService.UpdateUser(request);
 
             if (user == null)
             {
@@ -106,7 +107,7 @@ namespace PruebaTecnica.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var result = await _userDAO.DeleteUser(id);
+            var result = await _userService.DeleteUser(id);
 
             if (!result)
             {

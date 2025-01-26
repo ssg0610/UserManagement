@@ -11,18 +11,18 @@ namespace PruebaTecnica.Controllers
     [Route("api/departments")]
     public class DepartmentsController : ControllerBase
     {
-        private readonly DepartmentService _departmentDAO;
+        private readonly DepartmentService _departmentService;
 
         public DepartmentsController(DepartmentService departmentDAO)
         {
-            _departmentDAO = departmentDAO;
+            _departmentService = departmentDAO;
         }
 
         // GET: api/departments
         [HttpGet]
         public async Task<IActionResult> GetDepartments()
         {
-            var departments = await _departmentDAO.GetDepartments();
+            var departments = await _departmentService.GetDepartments();
 
             if (departments == null)
             {
@@ -36,7 +36,7 @@ namespace PruebaTecnica.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDepartment(int id)
         {
-            var department = await _departmentDAO.GetDepartment(id);
+            var department = await _departmentService.GetDepartment(id);
 
             if (department == null)
             {
@@ -50,7 +50,7 @@ namespace PruebaTecnica.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> GetDepartmentsWithUsers()
         {
-            var departments = await _departmentDAO.GetDepartmentsWithUsers();
+            var departments = await _departmentService.GetDepartmentsWithUsers();
 
             if (departments == null)
             {
@@ -64,7 +64,7 @@ namespace PruebaTecnica.Controllers
         [HttpGet("{id}/users")]
         public async Task<IActionResult> GetDepartmentWithUsers(int id)
         {
-            var department = await _departmentDAO.GetDepartmentWithUsers(id);
+            var department = await _departmentService.GetDepartmentWithUsers(id);
 
             if (department == null)
             {
@@ -78,7 +78,7 @@ namespace PruebaTecnica.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDepartment(Department request)
         {
-            var dept = await _departmentDAO.CreateDepartment(request);
+            var dept = await _departmentService.CreateDepartment(request);
 
             return CreatedAtAction(nameof(GetDepartment), new { id = dept.Id}, dept);
         }
@@ -92,7 +92,7 @@ namespace PruebaTecnica.Controllers
                 return BadRequest();
             }
 
-            var dept = await _departmentDAO.UpdateDepartment(request);
+            var dept = await _departmentService.UpdateDepartment(request);
 
             if (dept == null)
             {
@@ -106,7 +106,7 @@ namespace PruebaTecnica.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDepartment(int id)
         {
-            var result = await _departmentDAO.DeleteDepartment(id);
+            var result = await _departmentService.DeleteDepartment(id);
 
             if (!result)
             {

@@ -13,19 +13,19 @@ namespace PruebaTecnica.Models.DTO
         }
         public async Task<IEnumerable<Department>> GetDepartments()
         {
-            return await _context.Departments.ToListAsync();
+            return await _context.Departments.Where(x => x.IsDeleted == false).ToListAsync();
         }
         public async Task<IEnumerable<Department>> GetDepartmentsWithUsers()
         {
-            return await _context.Departments.Include(x => x.Users).ToListAsync();
+            return await _context.Departments.Where(x => x.IsDeleted == false).Include(x => x.Users).ToListAsync();
         }
         public async Task<Department> GetDepartment(int id)
         {
-            return await _context.Departments.FindAsync(id);
+            return await _context.Departments.Where(x => x.IsDeleted == false).FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<Department> GetDepartmentWithUsers(int id)
         {
-            return await _context.Departments.Include(x => x.Users).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Departments.Where(x => x.IsDeleted == false).Include(x => x.Users).FirstOrDefaultAsync(x => x.Id == id);
         }
         public async Task<Department> CreateDepartment(Department department)
         {
